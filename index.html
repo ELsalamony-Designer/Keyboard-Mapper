@@ -138,18 +138,18 @@
     <script>
         const arabicToEnglish = {
             "ذ": "`", "1": "1", "2": "2", "3": "3", "4": "4", "5": "5", "6": "6", "7": "7", "8": "8", "9": "9", "0": "0", "-": "-", "=": "=",
-    "ض": "Q", "ص": "W", "ث": "E", "ق": "R", "ف": "T", "غ": "Y", "ع": "U", "ه": "I", "خ": "O", "ح": "P", "ج": "[", "د": "]",
-    "ش": "A", "س": "S", "ي": "D", "ب": "F", "ل": "G", "ا": "H", "ت": "J", "ن": "K", "م": "L", "ك": ";", "ط": "'",
-    "ئ": "Z", "ء": "X", "ؤ": "C", "ر": "V", "لا": "B", "ى": "N", "ة": "M", "و": ",", "ز": ".", "ظ":"/",
-    
-    "ض": "q", "ص": "w", "ث": "e", "ق": "r", "ف": "t", "غ": "y", "ع": "u", "ه": "i", "خ": "o", "ح": "p", "ج": "[", "د": "]",
-  "ش": "a", "س": "s", "ي": "d", "ب": "f", "ل": "g", "ا": "h", "ت": "j", "ن": "k", "م": "l", "ك": ";", "ط": "'",
-  "ئ": "z", "ء": "x", "ؤ": "c", "ر": "v", "لا": "b", "ى": "n", "ة": "m", "و": ",", "ز": ".", "ظ": "/"
+            "ض": "q", "ص": "w", "ث": "e", "ق": "r", "ف": "t", "غ": "y", "ع": "u", "ه": "i", "خ": "o", "ح": "p", "ج": "[", "د": "]",
+            "ش": "a", "س": "s", "ي": "d", "ب": "f", "ل": "g", "ا": "h", "ت": "j", "ن": "k", "م": "l", "ك": ";", "ط": "'",
+            "ئ": "z", "ء": "x", "ؤ": "c", "ر": "v", "لا": "b", "ى": "n", "ة": "m", "و": ",", "ز": ".", "ظ":"/"
         };
 
         const englishToArabic = {};
         for (let key in arabicToEnglish) {
-            englishToArabic[arabicToEnglish[key]] = key;
+            englishToArabic[arabicToEnglish[key]] = key; // Add uppercase mapping (e.g., "Q": "ض")
+            // If the English character is an uppercase letter, add its lowercase mapping too
+            if (arabicToEnglish[key].match(/[A-Z]/)) {
+                englishToArabic[arabicToEnglish[key].toLowerCase()] = key; // Add lowercase mapping (e.g., "q": "ض")
+            }
         }
 
         function convertToEnglish() {
@@ -173,7 +173,8 @@
             const input = document.getElementById("inputText").value;
             let output = "";
             for (let char of input) {
-                output += englishToArabic[char] || char;
+                // Lookup both the exact character and its lowercase version
+                output += englishToArabic[char] || englishToArabic[char.toLowerCase()] || char;
             }
             document.getElementById("outputText").value = output;
         }
