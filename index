@@ -1,0 +1,189 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8" />
+    <title>Arabic-English Keyboard Mapper</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;700&display=swap" rel="stylesheet">
+    <style>
+        body {
+            font-family: 'Roboto', 'Segoe UI', Arial, sans-serif;
+            background: linear-gradient(to right, #2c3e50, #34495e); /* Darker, gradient background */
+            color: #ecf0f1; /* Light text color */
+            padding: 20px;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            min-height: 100vh;
+            margin: 0;
+            box-sizing: border-box;
+        }
+
+        .container {
+            background: #3b5268; /* Slightly lighter container background */
+            padding: 30px;
+            border-radius: 12px;
+            box-shadow: 0 10px 25px rgba(0, 0, 0, 0.4);
+            width: 100%;
+            max-width: 700px;
+            text-align: center;
+            box-sizing: border-box;
+        }
+
+        h2 {
+            color: #83ccff; /* Accent color for the heading */
+            margin-bottom: 25px;
+            font-size: 2.5em;
+            letter-spacing: 1.5px;
+            text-shadow: 0 2px 4px rgba(0, 0, 0, 0.3);
+        }
+
+        textarea {
+            width: calc(100% - 20px); /* Account for padding */
+            height: 120px;
+            font-size: 1.3em;
+            padding: 15px;
+            margin-bottom: 20px;
+            border: 1px solid #5a7d9b;
+            border-radius: 8px;
+            background: #2a3c4f;
+            color: #ecf0f1;
+            resize: vertical; /* Allow vertical resizing */
+            box-sizing: border-box;
+            transition: border-color 0.3s ease, box-shadow 0.3s ease;
+        }
+
+        textarea::placeholder {
+            color: #b0c4de; /* Lighter placeholder text */
+            opacity: 0.7; /* Make it slightly transparent */
+        }
+
+        textarea:focus {
+            border-color: #83ccff;
+            box-shadow: 0 0 12px rgba(131, 204, 255, 0.6);
+            outline: none;
+        }
+
+        button {
+            font-size: 1.1em;
+            padding: 12px 25px;
+            margin: 8px;
+            border: none;
+            border-radius: 30px; /* More rounded buttons */
+            background: linear-gradient(to right, #6dd5ed, #2193b0); /* Gradient button background */
+            color: white;
+            cursor: pointer;
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.3);
+            transition: all 0.3s ease;
+            font-weight: bold;
+            letter-spacing: 0.5px;
+        }
+
+        button:hover {
+            background: linear-gradient(to right, #2193b0, #6dd5ed);
+            transform: translateY(-3px);
+            box-shadow: 0 8px 20px rgba(0, 0, 0, 0.4);
+        }
+
+        button:active {
+            transform: translateY(0);
+            box-shadow: 0 3px 10px rgba(0, 0, 0, 0.3);
+        }
+
+        .buttons-container {
+            display: flex;
+            justify-content: center;
+            margin-bottom: 20px;
+            flex-wrap: wrap; /* Allow buttons to wrap on small screens */
+        }
+
+        /* Responsive adjustments */
+        @media (max-width: 600px) {
+            .container {
+                padding: 20px;
+            }
+
+            h2 {
+                font-size: 2em;
+            }
+
+            textarea {
+                font-size: 1.1em;
+                height: 100px;
+            }
+
+            button {
+                font-size: 1em;
+                padding: 10px 20px;
+                margin: 5px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h2>🌀 Arabic-English Keyboard Mapper</h2>
+        <textarea id="inputText" placeholder="Type here..."></textarea>
+        <div class="buttons-container">
+            <button onclick="convertToEnglish()">Arabic ➜ English</button>
+            <button onclick="convertToArabic()">English ➜ Arabic</button>
+            <button onclick="copyResult()">Copy Result</button>
+        </div>
+        <textarea id="outputText" placeholder="Result here..." readonly></textarea>
+    </div>
+    <h1>
+        By Elsalamony
+    </h1>
+
+    <script>
+        const arabicToEnglish = {
+            "ذ": "`", "1": "1", "2": "2", "3": "3", "4": "4", "5": "5", "6": "6", "7": "7", "8": "8", "9": "9", "0": "0", "-": "-", "=": "=",
+            "ض": "q", "ص": "w", "ث": "e", "ق": "r", "ف": "t", "غ": "y", "ع": "u", "ه": "i", "خ": "o", "ح": "p", "ج": "[", "د": "]",
+            "ش": "a", "س": "s", "ي": "d", "ب": "f", "ل": "g", "ا": "h", "ت": "j", "ن": "k", "م": "l", "ك": ";", "ط": "'",
+            "ئ": "z", "ء": "x", "ؤ": "c", "ر": "v", "لا": "b", "ى": "n", "ة": "m", "و": ",", "ز": ".", "/" :"ظ", "ذ": "`", "1": "1", "2": "2", "3": "3", "4": "4", "5": "5", "6": "6", "7": "7", "8": "8", "9": "9", "0": "0", "-": "-", "=": "=",
+            "ض": "Q", "ص": "W", "ث": "E", "ق": "R", "ف": "T", "غ": "Y", "ع": "U", "ه": "I", "خ": "O", "ح": "P", "ج": "[", "د": "]",
+            "ش": "A", "س": "S", "ي": "D", "ب": "F", "ل": "G", "ا": "H", "ت": "J", "ت": "K", "م": "L", "ك": ";", "ط": "'",
+            "ئ": "Z", "ء": "X", "ؤ": "C", "ر": "V", "لا": "B", "ى": "N", "ة": "M", "و": ",", "ز": ".", "ظ":"/"
+        };
+
+        const englishToArabic = {};
+        for (let key in arabicToEnglish) {
+            englishToArabic[arabicToEnglish[key]] = key;
+        }
+
+        function convertToEnglish() {
+            const input = document.getElementById("inputText").value;
+            let output = "";
+            let i = 0;
+            while (i < input.length) {
+                // Special handling for 'لا'
+                if (input[i] === 'ل' && input[i+1] === 'ا' && arabicToEnglish["لا"]) {
+                    output += arabicToEnglish["لا"];
+                    i += 2; // Skip both 'ل' and 'ا'
+                } else {
+                    output += arabicToEnglish[input[i]] || input[i];
+                    i++;
+                }
+            }
+            document.getElementById("outputText").value = output;
+        }
+
+        function convertToArabic() {
+            const input = document.getElementById("inputText").value;
+            let output = "";
+            for (let char of input) {
+                output += englishToArabic[char] || char;
+            }
+            document.getElementById("outputText").value = output;
+        }
+
+        function copyResult() {
+            const outputTextarea = document.getElementById("outputText");
+            outputTextarea.select(); // Select the text in the output area
+            outputTextarea.setSelectionRange(0, 99999); // For mobile devices
+            document.execCommand("copy"); // Copy the text to the clipboard
+            alert("Result copied to clipboard!"); // Optional: Provide feedback to the user
+        }
+    </script>
+</body>
+</html>
